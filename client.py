@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import aiohttp
 from bs4 import BeautifulSoup
@@ -6,6 +7,7 @@ from bs4.element import Tag
 
 sleep_time = 5
 restaurant_url = "https://goout.net/cs/restaurace/la-degustation-boheme-bourgeoise/owee/"
+logging.basicConfig(level=logging.DEBUG)
 
 
 def normalize(string: str) -> str:
@@ -36,7 +38,7 @@ async def main():
         while True:
             html = await fetch(session, restaurant_url)
             events = parse_events(html)
-            print(events)
+            logging.info(f"component=worker action=get-events events={events}")
             await asyncio.sleep(sleep_time)
 
 
