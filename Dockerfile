@@ -7,6 +7,7 @@ RUN pip install --user pipenv
 RUN /root/.local/bin/pipenv install --system
 
 # Copy application
+COPY kupcimat kupcimat
 COPY server.py .
 
 # Build production image
