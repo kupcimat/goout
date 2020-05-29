@@ -9,6 +9,7 @@ httpie = "*"
 [packages]
 aiohttp = "*"
 beautifulsoup4 = "*"
+google-cloud-storage = "*"
 
 [requires]
 python_version = "3.8"
