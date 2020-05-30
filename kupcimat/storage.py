@@ -43,4 +43,4 @@ def generate_upload_curl(url: str) -> str:
     return ("curl -X PUT "
             "-H 'Content-Type: application/octet-stream' "
             f"-H 'x-goog-content-length-range: 0,{FILE_SIZE_LIMIT_BYTES}' "
-            f"--upload-file file '{url}'")
+            f"--upload-file my-file '{url}'")
