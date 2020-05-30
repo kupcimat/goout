@@ -22,9 +22,10 @@ async def create_upload_url(request: web.Request) -> web.Response:
     file_id = util.generate_id()
     url = storage.generate_upload_signed_url(BUCKET_NAME, file_id)
     response = {
-        "upload": {
-            "url": url,
-            "curl": storage.generate_upload_curl(url)
+        "file": {
+            "id": file_id,
+            "uploadUrl": url,
+            "uploadCurl": storage.generate_upload_curl(url)
         }
     }
     return web.json_response(response, **created(f"/api/files/{file_id}"))
