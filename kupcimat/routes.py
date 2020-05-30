@@ -4,7 +4,7 @@ from aiohttp import web
 
 from kupcimat import storage
 from kupcimat import util
-from kupcimat.routes_util import created, moved
+from kupcimat.routes_util import created, moved, path_variables
 
 BUCKET_NAME = "goout-test"
 
@@ -32,14 +32,14 @@ async def create_upload_url(request: web.Request) -> web.Response:
 
 
 async def download_file(request: web.Request) -> web.Response:
-    file_id = request.match_info["file_id"]
+    file_id = path_variables(request, "file_id")
     url = storage.generate_download_signed_url(BUCKET_NAME, file_id)
     return web.Response(**moved(url))
 
 
 async def create_task(request: web.Request) -> web.Response:
     # TODO create task for worker
-    file_id = request.match_info["file_id"]
+    file_id = path_variables(request, "file_id")
     task_id = util.generate_id()
     if not storage.blob_exists(BUCKET_NAME, file_id):
         raise web.HTTPNotFound(reason="File doesn't exist")
@@ -53,8 +53,7 @@ async def create_task(request: web.Request) -> web.Response:
 
 async def get_task(request: web.Request) -> web.Response:
     # TODO check task existence
-    file_id = request.match_info["file_id"]
-    task_id = request.match_info["task_id"]
+    file_id, task_id = path_variables(request, "file_id", "task_id")
     if not storage.blob_exists(BUCKET_NAME, file_id):
         raise web.HTTPNotFound(reason="File doesn't exist")
     response = {
