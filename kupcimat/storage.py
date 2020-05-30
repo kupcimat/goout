@@ -39,10 +39,6 @@ def generate_upload_signed_url(bucket_name: str, blob_name: str) -> str:
     return url
 
 
-def generate_download_curl(url: str) -> str:
-    return f"curl '{url}'"
-
-
 def generate_upload_curl(url: str) -> str:
     return ("curl -X PUT "
             "-H 'Content-Type: application/octet-stream' "
