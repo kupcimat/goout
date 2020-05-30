@@ -4,6 +4,7 @@ from aiohttp import web
 
 from kupcimat import storage
 from kupcimat import util
+from kupcimat.routes_util import created
 
 BUCKET_NAME = "goout-test"
 
@@ -27,10 +28,7 @@ async def create_upload_url(request: web.Request) -> web.Response:
             "curl": storage.generate_upload_curl(url)
         }
     }
-    # TODO create method for returning common http params
-    return web.json_response(response,
-                             status=201,
-                             headers={"Location": f"/api/files/{file_id}"})
+    return web.json_response(response, **created(f"/api/files/{file_id}"))
 
 
 async def get_download_url(request: web.Request) -> web.Response:
@@ -55,9 +53,7 @@ async def create_task(request: web.Request) -> web.Response:
             "id": task_id
         }
     }
-    return web.json_response(response,
-                             status=201,
-                             headers={"Location": f"/api/files/{file_id}/tasks/{task_id}"})
+    return web.json_response(response, **created(f"/api/files/{file_id}/tasks/{task_id}"))
 
 
 async def get_task(request: web.Request) -> web.Response:
