@@ -38,10 +38,11 @@ async def download_file(request: web.Request) -> web.Response:
 
 
 async def create_task(request: web.Request) -> web.Response:
-    # TODO check file existence
     # TODO create task for worker
     file_id = request.match_info["file_id"]
     task_id = util.generate_id()
+    if not storage.blob_exists(BUCKET_NAME, file_id):
+        raise web.HTTPNotFound(reason="File doesn't exist")
     response = {
         "task": {
             "id": task_id
@@ -51,9 +52,11 @@ async def create_task(request: web.Request) -> web.Response:
 
 
 async def get_task(request: web.Request) -> web.Response:
-    # TODO check file and task existence
+    # TODO check task existence
     file_id = request.match_info["file_id"]
     task_id = request.match_info["task_id"]
+    if not storage.blob_exists(BUCKET_NAME, file_id):
+        raise web.HTTPNotFound(reason="File doesn't exist")
     response = {
         "task": {
             "id": task_id,

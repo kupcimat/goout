@@ -39,6 +39,13 @@ def generate_upload_signed_url(bucket_name: str, blob_name: str) -> str:
     return url
 
 
+def blob_exists(bucket_name: str, blob_name: str) -> bool:
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    return blob.exists()
+
+
 def generate_upload_curl(url: str) -> str:
     return ("curl -X PUT "
             "-H 'Content-Type: application/octet-stream' "
