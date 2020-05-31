@@ -39,6 +39,26 @@ def generate_upload_signed_url(bucket_name: str, blob_name: str) -> str:
     return url
 
 
+def download_blob(bucket_name: str, source_blob_name: str, destination_file_name: str) -> None:
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(source_blob_name)
+
+    blob.download_to_filename(destination_file_name)
+    logging.info("action=download_file bucket=%s blob=%s file=%s",
+                 bucket_name, source_blob_name, destination_file_name)
+
+
+def upload_blob(bucket_name: str, source_file_name: str, destination_blob_name: str) -> None:
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(source_file_name)
+    logging.info("action=upload_file bucket=%s blob=%s file=%s",
+                 bucket_name, destination_blob_name, source_file_name)
+
+
 def blob_exists(bucket_name: str, blob_name: str) -> bool:
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
