@@ -3,7 +3,7 @@ import os
 
 from aiohttp import web
 
-from kupcimat.web import routes
+from kupcimat.worker import routes
 
 logging.basicConfig(level=logging.DEBUG)
 port = int(os.getenv("PORT", default=8080))

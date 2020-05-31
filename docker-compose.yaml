@@ -1,7 +1,9 @@
 version: "3.7"
 services:
-  backend:
-    build: .
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-web
     environment:
       PORT: "8080"
       GOOGLE_APPLICATION_CREDENTIALS: /credentials/gcloud-storage-account.json
@@ -9,3 +11,11 @@ services:
       - "8080:8080"
     volumes:
       - "./credentials:/credentials"
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile-worker
+    environment:
+      PORT: "8081"
+    ports:
+      - "8081:8081"
