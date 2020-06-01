@@ -2,7 +2,7 @@ from typing import List
 
 from aiohttp import web
 
-from kupcimat.routes_util import created, path_variables
+from kupcimat.routes_util import created, json_get, path_variables
 
 
 def create_routes() -> List[web.RouteDef]:
@@ -13,9 +13,8 @@ def create_routes() -> List[web.RouteDef]:
 
 
 async def create_task(request: web.Request) -> web.Response:
-    # TODO validate json input
     task_json = await request.json()
-    task_id = task_json["task"]["id"]
+    task_id = json_get(task_json, "task", "id")
     response = {
         "task": {
             "id": task_id
