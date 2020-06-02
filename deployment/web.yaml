@@ -1,0 +1,9 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/kupcimat/web
