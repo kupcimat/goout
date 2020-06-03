@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile-web
     environment:
       PORT: "8080"
+      BUCKET_NAME: goout-bucket
       GOOGLE_APPLICATION_CREDENTIALS: /credentials/web-gcloud-account.json
     ports:
       - "8080:8080"

@@ -5,8 +5,7 @@ from aiohttp import web
 from kupcimat import storage
 from kupcimat import util
 from kupcimat.routes_util import created, moved, path_variables
-
-BUCKET_NAME = "goout-test"
+from kupcimat.web.config import BUCKET_NAME
 
 
 def create_routes() -> List[web.RouteDef]:
