@@ -12,6 +12,7 @@ pytest-asyncio = "*"
 [packages]
 aiohttp = "*"
 google-cloud-storage = "*"
+google-cloud-tasks = "*"
 
 [requires]
 python_version = "3.8"
