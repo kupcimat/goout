@@ -54,9 +54,18 @@ def delete_service(ctx, service):
 
 
 @task(help={"service": "Service name"})
-def set_service_public(ctx, service):
+def allow_public_service(ctx, service):
     """
     Allow public access for service
     """
     ctx.run(f"gcloud beta run services add-iam-policy-binding {service}-service"
+            f" --member='allUsers' --role='roles/run.invoker' {GCLOUD_OPTIONS}")
+
+
+@task(help={"service": "Service name"})
+def block_public_service(ctx, service):
+    """
+    Block public access for service
+    """
+    ctx.run(f"gcloud beta run services remove-iam-policy-binding {service}-service"
             f" --member='allUsers' --role='roles/run.invoker' {GCLOUD_OPTIONS}")
