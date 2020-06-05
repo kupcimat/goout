@@ -29,26 +29,26 @@ def deploy_service(ctx, service):
     ctx.run(f"gcloud beta run services replace deployment/{service}.yaml {GCLOUD_OPTIONS}")
 
 
-@task(help={"service": "Service name (iterable)"},
-      iterable=["service"])
-def deploy(ctx, service):
+@task(help={"service": "Service name",
+            "public": "Allow public access (optional)"})
+def deploy(ctx, service, public=False):
     """
-    Build and deploy multiple services to default gcloud project
+    Build and deploy service to default gcloud project
     """
     ctx.run("gcloud auth configure-docker gcr.io")
-    for srv in service:
-        dockerfile = f"Dockerfile-{srv}"
-        image_name = f"gcr.io/{GCLOUD_PROJECT}/{srv}"
-        build_image(ctx, image_name, dockerfile)
-        push_image(ctx, image_name)
-    for srv in service:
-        deploy_service(ctx, srv)
+    dockerfile = f"Dockerfile-{service}"
+    image_name = f"gcr.io/{GCLOUD_PROJECT}/{service}"
+    build_image(ctx, image_name, dockerfile)
+    push_image(ctx, image_name)
+    deploy_service(ctx, service)
+    if public:
+        allow_public_service(ctx, service)
 
 
 @task(help={"service": "Service name"})
 def delete_service(ctx, service):
     """
-    Delete service in gcloud 
+    Delete service in gcloud
     """
     ctx.run(f"gcloud beta run services delete {service}-service {GCLOUD_OPTIONS}")
 
