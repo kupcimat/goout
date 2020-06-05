@@ -7,7 +7,6 @@ spec:
     spec:
       containers:
         - image: gcr.io/kupcimat/web
-        - env:
+          env:
             - name: BUCKET_NAME
               value: goout-bucket
-
