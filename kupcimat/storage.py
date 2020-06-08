@@ -1,6 +1,9 @@
 import datetime
 import logging
 
+import google.auth.exceptions
+from google.auth import compute_engine
+from google.auth.transport import requests
 from google.cloud import storage
 
 SIGNED_URL_EXPIRATION_MINUTES = 5
@@ -15,7 +18,8 @@ def generate_download_signed_url(bucket_name: str, blob_name: str) -> str:
     url = blob.generate_signed_url(
         version="v4",
         method="GET",
-        expiration=datetime.timedelta(minutes=SIGNED_URL_EXPIRATION_MINUTES)
+        expiration=datetime.timedelta(minutes=SIGNED_URL_EXPIRATION_MINUTES),
+        credentials=get_gcp_signing_credentials()
     )
 
     logging.info("action=generate_storage_url type=download bucket=%s blob=%s", bucket_name, blob_name)
@@ -32,7 +36,8 @@ def generate_upload_signed_url(bucket_name: str, blob_name: str) -> str:
         method="PUT",
         content_type="application/octet-stream",
         headers={"x-goog-content-length-range": f"0,{FILE_SIZE_LIMIT_BYTES}"},
-        expiration=datetime.timedelta(minutes=SIGNED_URL_EXPIRATION_MINUTES)
+        expiration=datetime.timedelta(minutes=SIGNED_URL_EXPIRATION_MINUTES),
+        credentials=get_gcp_signing_credentials()
     )
 
     logging.info("action=generate_storage_url type=upload bucket=%s blob=%s", bucket_name, blob_name)
@@ -64,6 +69,14 @@ def blob_exists(bucket_name: str, blob_name: str) -> bool:
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(blob_name)
     return blob.exists()
+
+
+def get_gcp_signing_credentials():
+    # https://github.com/googleapis/google-auth-library-python/issues/50
+    try:
+        return compute_engine.IDTokenCredentials(requests.Request(), "")
+    except google.auth.exceptions.TransportError:
+        return None
 
 
 def generate_upload_curl(url: str) -> str:
