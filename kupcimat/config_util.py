@@ -11,3 +11,7 @@ def get_str(variable: str, default: Optional[str] = None) -> str:
 
 def get_int(variable: str, default: Optional[int] = None) -> int:
     return int(get_str(variable, default))
+
+
+def is_dev_environment() -> bool:
+    return os.getenv("ENVIRONMENT") == "development"

@@ -1,10 +1,11 @@
 import datetime
 import logging
 
-import google.auth.exceptions
 from google.auth import compute_engine
 from google.auth.transport import requests
 from google.cloud import storage
+
+from kupcimat.config_util import is_dev_environment
 
 SIGNED_URL_EXPIRATION_MINUTES = 5
 FILE_SIZE_LIMIT_BYTES = 1 * 1024 * 1024
@@ -73,10 +74,9 @@ def blob_exists(bucket_name: str, blob_name: str) -> bool:
 
 def get_gcp_signing_credentials():
     # https://github.com/googleapis/google-auth-library-python/issues/50
-    try:
-        return compute_engine.IDTokenCredentials(requests.Request(), "")
-    except google.auth.exceptions.TransportError:
+    if is_dev_environment():
         return None
+    return compute_engine.IDTokenCredentials(requests.Request(), "")
 
 
 def generate_upload_curl(url: str) -> str:

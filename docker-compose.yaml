@@ -7,6 +7,8 @@ services:
     environment:
       PORT: "8080"
       BUCKET_NAME: goout-bucket
+      # development configuration
+      ENVIRONMENT: development
       GOOGLE_APPLICATION_CREDENTIALS: /credentials/web-gcloud-account.json
     ports:
       - "8080:8080"
